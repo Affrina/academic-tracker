@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Academic Tracker</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <h2>Academic Tracker</h2>
+        <form action="/submit" method="post">
+            <label>Name:</label>
+            <input type="text" name="name" required><br><br>
+
+            <label>Math:</label>
+            <input type="number" name="math" required><br><br>
+
+            <label>Science:</label>
+            <input type="number" name="science" required><br><br>
+
+            <label>English:</label>
+            <input type="number" name="english" required><br><br>
+
+            <label>History:</label>
+            <input type="number" name="history" required><br><br>
+
+            <label>Computer Science:</label>
+            <input type="number" name="cs" required><br><br>
+
+            <input type="submit" value="Submit">
+        </form>
+    </div>
+</body>
+</html>

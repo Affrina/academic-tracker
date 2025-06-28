@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Academic Tracker - Dashboard</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+
+<!-- Navbar -->
+<div class="navbar">
+    <div class="nav-left">
+        <h2>Academic Tracker</h2>
+    </div>
+    <div class="nav-right">
+        <a href="/dashboard">Dashboard</a>
+        <a href="/mark-entry">Mark Entry</a>
+        <a href="/">Logout</a>
+    </div>
+</div>
+
+<!-- Main Container -->
+<div class="container">
+    <h1>Welcome, {{ user.username }}</h1>
+
+    <!-- CGPA Chart -->
+    <div class="card">
+        <h2>📈 CGPA Progress (Per Semester)</h2>
+        <canvas id="cgpaChart"></canvas>
+        <div class="indicator" id="cgpaIndicator"></div>
+    </div>
+
+    <!-- Strength & Weakness -->
+    <div class="card-row">
+        <div class="card half">
+            <h2>💪 Strengths</h2>
+            <canvas id="strengthChart"></canvas>
+        </div>
+        <div class="card half">
+            <h2>⚠️ Weaknesses</h2>
+            <canvas id="weaknessChart"></canvas>
+        </div>
+    </div>
+
+    <!-- Grade Distribution & Academic Health -->
+    <div class="card-row">
+        <div class="card half">
+            <h2>📊 Grade Distribution</h2>
+            <canvas id="gradeChart"></canvas>
+        </div>
+        <div class="card half">
+            <h2>🎯 Academic Health</h2>
+            <p><b>Average Marks:</b> {{ average_marks }}</p>
+            <p><b>Standard Deviation:</b> {{ standard_deviation }}</p>
+            <ul>
+                <li>Average shows overall performance.</li>
+                <li>Low deviation = consistent performance.</li>
+                <li>High deviation = fluctuating performance.</li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- Suggestions -->
+    <div class="card">
+        <h2>💡 Suggestions for Improvement</h2>
+        <ul>
+            {% for subject in weaknesses.keys() %}
+            <li>Focus more on <b>{{ subject }}</b>. Practice regularly to strengthen this area.</li>
+            {% endfor %}
+            <li>Revise difficult topics weekly.</li>
+            <li>Maintain consistent study habits.</li>
+            <li>Participate in study groups.</li>
+            <li>Utilize learning platforms like Coursera, Udemy, Khan Academy.</li>
+        </ul>
+    </div>
+</div>
+
+<script>
+    const cgpaLabels = {{ cgpa_per_semester.keys() | list | tojson |safe }};
+    const cgpaValues = {{ cgpa_per_semester.values() | list | tojson }};
+
+    const strengthLabels = {{ strengths.keys() | list | tojson }};
+    const strengthValues = {{ strengths.values() | list | tojson }};
+
+    const weakLabels = {{ weaknesses.keys() | list | tojson }};
+    const weakValues = {{ weaknesses.values() | list | tojson }};
+
+    const gradeLabels = {{ grade_distribution.keys() | list | tojson }};
+    const gradeValues = {{ grade_distribution.values() | list | tojson }};
+
+    // ✅ CGPA Chart
+    const cgpaChart = new Chart(document.getElementById('cgpaChart'), {
+        type: 'bar',
+        data: {
+            labels: cgpaLabels,
+            datasets: [{
+                label: 'CGPA',
+                data: cgpaValues,
+                backgroundColor: 'rgba(54, 162, 235, 0.7)',
+                borderColor: 'rgba(54, 162, 235, 1)',
+                borderWidth: 1
+            }]
+        },
+        options: {
+            responsive: true,
+            plugins: {
+                tooltip: { enabled: true },
+                legend: { display: false }
+            },
+            scales: {
+                y: { beginAtZero: true }
+            }
+        }
+    });
+
+    const maxCGPA = Math.max(...cgpaValues);
+    const minCGPA = Math.min(...cgpaValues);
+    const maxIndex = cgpaValues.indexOf(maxCGPA);
+    const minIndex = cgpaValues.indexOf(minCGPA);
+    document.getElementById('cgpaIndicator').innerHTML = `
+        🚩 Highest CGPA: <b>${maxCGPA}</b> in ${cgpaLabels[maxIndex]}<br>
+        🚩 Lowest CGPA: <b>${minCGPA}</b> in ${cgpaLabels[minIndex]}
+    `;
+
+    // ✅ Strength Chart
+    new Chart(document.getElementById('strengthChart'), {
+        type: 'bar',
+        data: {
+            labels: strengthLabels,
+            datasets: [{
+                label: 'Strength Score',
+                data: strengthValues,
+                backgroundColor: 'rgba(76, 175, 80, 0.7)',
+                borderColor: 'rgba(76, 175, 80, 1)',
+                borderWidth: 1
+            }]
+        },
+        options: {
+            indexAxis: 'y',
+            responsive: true,
+            plugins: {
+                tooltip: { enabled: true },
+                legend: { display: false }
+            },
+            scales: {
+                x: { beginAtZero: true }
+            }
+        }
+    });
+
+    // ✅ Weakness Chart
+    new Chart(document.getElementById('weaknessChart'), {
+        type: 'bar',
+        data: {
+            labels: weakLabels,
+            datasets: [{
+                label: 'Weakness Score',
+                data: weakValues,
+                backgroundColor: 'rgba(255, 99, 132, 0.7)',
+                borderColor: 'rgba(255, 99, 132, 1)',
+                borderWidth: 1
+            }]
+        },
+        options: {
+            indexAxis: 'y',
+            responsive: true,
+            plugins: {
+                tooltip: { enabled: true },
+                legend: { display: false }
+            },
+            scales: {
+                x: { beginAtZero: true }
+            }
+        }
+    });
+
+    // ✅ Grade Distribution Doughnut Chart
+   // ✅ Grade Distribution Doughnut Chart
+new Chart(document.getElementById('gradeChart'), {
+    type: 'doughnut',
+    data: {
+        labels: gradeLabels,
+        datasets: [{
+            label: 'Grade Distribution',
+            data: gradeValues,
+            backgroundColor: [
+                '#4caf50', '#2196f3', '#ffc107', '#f44336', '#9c27b0'
+            ]
+        }]
+    },
+    options: {
+        responsive: true,
+        plugins: {
+            tooltip: { enabled: true },
+            legend: { 
+                position: 'right',   // ✅ Legend on right side
+                labels: {
+                    boxWidth: 20,
+                    padding: 20
+                }
+            }
+        }
+    }
+});
+
+
+</script>
+
+</body>
+</html>

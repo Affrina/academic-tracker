@@ -1,0 +1,102 @@
+/* Global Styles */
+body {
+    background: linear-gradient(to right, #e0eafc, #cfdef3);
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    margin: 0;
+    padding: 0;
+}
+
+/* Container */
+.container {
+    width: 420px;
+    background-color: #ffffff;
+    padding: 35px 40px;
+    margin: 80px auto;
+    border-radius: 16px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+    text-align: center;
+}
+
+/* Heading */
+.container h2 {
+    margin-bottom: 25px;
+    color: #003366;
+    font-size: 30px;
+    font-weight: 700;
+}
+
+/* Form Labels */
+label {
+    display: block;
+    text-align: left;
+    margin-bottom: 6px;
+    font-weight: 600;
+    color: #333;
+}
+
+/* Inputs */
+input[type="text"],
+input[type="password"] {
+    width: 100%;
+    padding: 12px 15px;
+    border: 1px solid #d0d7e2;
+    border-radius: 10px;
+    margin-bottom: 18px;
+    box-sizing: border-box;
+    transition: border-color 0.3s, box-shadow 0.3s;
+    font-size: 15px;
+}
+
+input[type="text"]:focus,
+input[type="password"]:focus {
+    border-color: #3366cc;
+    box-shadow: 0 0 5px rgba(51, 102, 204, 0.3);
+    outline: none;
+}
+
+/* Submit Button */
+input[type="submit"] {
+    background: linear-gradient(to right, #3366cc, #4facfe);
+    color: white;
+    padding: 12px;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    width: 100%;
+    font-weight: bold;
+    font-size: 16px;
+    transition: background 0.3s, transform 0.2s;
+}
+
+input[type="submit"]:hover {
+    background: linear-gradient(to right, #2b57b0, #3f90fc);
+    transform: translateY(-2px);
+}
+
+/* Register Link */
+p {
+    margin-top: 20px;
+    color: #555;
+    font-size: 14px;
+}
+
+a {
+    color: #3366cc;
+    text-decoration: none;
+    font-weight: 600;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
+/* Flash Messages */
+.flash-message {
+    background-color: #fdecea;
+    color: #d93025;
+    border: 1px solid #f5c6cb;
+    padding: 12px;
+    border-radius: 10px;
+    margin-bottom: 18px;
+    font-size: 14px;
+}
